@@ -21,9 +21,7 @@ class CryptoRoutes {
 
 	private async getStatistics(req: express.Request, res: express.Response) {
 		try {
-			const statistics = await CryptoLogic.getStatistic(
-				req.body.user as string
-			);
+			const statistics = await CryptoLogic.getStatistic('tudor');
 			return res.status(200).json(statistics);
 		} catch (er) {
 			return res.status(400).json({ message: er.message });

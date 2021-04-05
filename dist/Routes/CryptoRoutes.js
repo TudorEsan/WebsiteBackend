@@ -29,7 +29,7 @@ class CryptoRoutes {
     getStatistics(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const statistics = yield CryptoLogic_1.default.getStatistic(req.body.user);
+                const statistics = yield CryptoLogic_1.default.getStatistic('tudor');
                 return res.status(200).json(statistics);
             }
             catch (er) {
