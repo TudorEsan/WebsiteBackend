@@ -6,7 +6,8 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "build",
+        "declaration": true,
         "baseUrl": ".",
         "paths": {
             "*": [
@@ -16,5 +17,8 @@
     },
     "include": [
         "src/**/*"
-    ]
+    ],
+    "exclude" : [
+    "node_modules"  /* exclude everything in  node_modules */
+]
 }
