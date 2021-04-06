@@ -5,7 +5,7 @@ export interface ICrypto extends mongoose.Document {
 	usdAdded: number;
 	ballance: number;
 	usdWithdrawn: number;
-	coins: [ICoin];
+	coins: ICoin[];
 }
 
 export interface CryptoDocument extends ICrypto, mongoose.Document {}
@@ -17,7 +17,7 @@ export interface ICoin {
 	amount: number;
     usd: number;
     sold: number;
-    transactions: [ITransaction]
+    transactions: ITransaction[]
 }
 
 export interface ITransaction {

@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
+    "dev": "nodemon --config nodemon.json src/index.ts",
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
     "start": "npm run serve",
