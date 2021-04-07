@@ -34,7 +34,11 @@ class App {
 	}
 
 	private config() {
-		this.app.use(cors());
+		this.app.use(
+			cors({
+				exposedHeaders: ["Authorization"],
+			})
+		);
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		//this.app.use('/', verifyAuth);
