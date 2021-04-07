@@ -1,5 +1,6 @@
 import e from "express";
 import express from "express";
+import { verifyAuth } from "../Middlewares/authVerification";
 import CryptoLogic from "../Core/CryptoLogic";
 import Crypto from "../Models/Crypto";
 
@@ -15,13 +16,13 @@ class CryptoRoutes {
 		this.router.get("/", this.getStatistics);
 		this.router.post("/addMoney", this.addMoney);
 		this.router.post("/withdraw", this.withdraw);
-        this.router.post("/", this.buyCrypto);
-        this.router.post("/sell", this.sellCrypto);
+		this.router.post("/", verifyAuth, this.buyCrypto);
+		this.router.post("/sell", verifyAuth, this.sellCrypto);
 	}
 
 	private async getStatistics(req: express.Request, res: express.Response) {
 		try {
-			const statistics = await CryptoLogic.getStatistic('tudor');
+			const statistics = await CryptoLogic.getStatistic("tudor");
 			return res.status(200).json(statistics);
 		} catch (er) {
 			return res.status(400).json({ message: er.message });
