@@ -18,12 +18,14 @@ export const verifyAuth: RequestHandler = async (req, res, next) => {
 			] = await UserLogic.regenerateTokenAndRefreshToken(
 				req.body.user,
 				refreshToken
-			);
+				);
 			res.header("Authorization", newToken + " " + newRefreshToken);
 			next();
 		}
 	} catch (e) {
+		console.log(e)
 		if (e.name === "TokenExpiredError") {
+			console.log('token expirat')
 			try {
 				const [
 					newToken,
@@ -31,7 +33,8 @@ export const verifyAuth: RequestHandler = async (req, res, next) => {
 				] = await UserLogic.regenerateTokenAndRefreshToken(
 					req.body.user,
 					refreshToken
-				);
+					);
+				console.log('A trecut ')
 				res.header("Authorization", newToken + " " + newRefreshToken);
 				next();
 			} catch (e) {

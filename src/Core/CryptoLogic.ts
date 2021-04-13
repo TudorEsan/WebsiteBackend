@@ -17,14 +17,6 @@ class CryptoLogic {
 		return [data.data[0].logo_url, data.data[0].name];
 	}
 
-	private static async getCoinPrice(abbreviation: string): Promise<number> {
-		const data = await axios.get(
-			`https://api.nomics.com/v1/currencies/ticker?key=${process.env.CRYPTO_KEY}&ids=${abbreviation}`
-		);
-		console.log("Price" + data.data[0].price);
-		return data.data[0].price;
-	}
-
 	private static async getCurrentPrices(abreviations: string[]) {
 		const data = await axios.get(
 			`https://api.nomics.com/v1/currencies/ticker?key=${
@@ -54,6 +46,8 @@ class CryptoLogic {
 			}[],
 			growth: 0,
 			actualAmount: 0,
+			usdGrowth: 0,
+			ballance: 0
 		};
 		const doc = await Crypto.findOne({ user });
 		if (!user) {
@@ -77,6 +71,8 @@ class CryptoLogic {
 		statistics.coins = statistics.coins.sort((a, b) => b.currentPrice - a.currentPrice);
 		statistics.growth = this.getGrowth(doc.usdAdded, actualAmount);
 		statistics.actualAmount = actualAmount;
+		statistics.usdGrowth = actualAmount - doc.usdAdded;
+		statistics.ballance = doc.ballance;
 		return statistics;
 	}
 
