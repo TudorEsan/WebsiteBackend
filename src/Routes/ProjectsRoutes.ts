@@ -63,7 +63,7 @@ class ProjectRoute {
     {
         img: '/tictactoe.png',
         title: 'Tic Tac Toe',
-        shortDesc: 'A python apps that plays tic tac toe against you',
+        shortDesc: 'A python app that plays tic tac toe against you',
         desc: 'The game uses the minimax algorithm to play against a human. It will predict next moves and will find a way to beat the human player or at least to make a draw.',
         learnedAbilities: [
             'Understand the minimax algorithm',
