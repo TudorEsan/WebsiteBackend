@@ -7,6 +7,7 @@ import Crypto from "./Models/Crypto";
 import CryptoRoutes from "./Routes/CryptoRoutes";
 import { verifyAuth } from "./Middlewares/authVerification";
 import AuthRoutes from "./Routes/AuthRoutes";
+import ProjectsRoutes from "./Routes/ProjectsRoutes";
 dotenv.config();
 
 class App {
@@ -51,6 +52,7 @@ class App {
 		this.app.get('', verifyAuth, (req, res) => {
 			res.send('Oosjdfojsfoij')
 		})
+		this.app.use("/projects", ProjectsRoutes)
 	}
 }
 

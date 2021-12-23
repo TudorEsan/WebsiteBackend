@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const authVerification_1 = require("../Middlewares/authVerification");
 const CryptoLogic_1 = __importDefault(require("../Core/CryptoLogic"));
 class CryptoRoutes {
     constructor() {
@@ -23,13 +24,13 @@ class CryptoRoutes {
         this.router.get("/", this.getStatistics);
         this.router.post("/addMoney", this.addMoney);
         this.router.post("/withdraw", this.withdraw);
-        this.router.post("/", this.buyCrypto);
-        this.router.post("/sell", this.sellCrypto);
+        this.router.post("/", authVerification_1.verifyAuth, this.buyCrypto);
+        this.router.post("/sell", authVerification_1.verifyAuth, this.sellCrypto);
     }
     getStatistics(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const statistics = yield CryptoLogic_1.default.getStatistic('tudor');
+                const statistics = yield CryptoLogic_1.default.getStatistic("tudor");
                 return res.status(200).json(statistics);
             }
             catch (er) {

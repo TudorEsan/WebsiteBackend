@@ -18,6 +18,8 @@ const MailRoutes_1 = __importDefault(require("./Routes/MailRoutes"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const CryptoRoutes_1 = __importDefault(require("./Routes/CryptoRoutes"));
+const authVerification_1 = require("./Middlewares/authVerification");
+const AuthRoutes_1 = __importDefault(require("./Routes/AuthRoutes"));
 dotenv_1.default.config();
 class App {
     constructor() {
@@ -39,13 +41,20 @@ class App {
         });
     }
     config() {
-        this.app.use(cors_1.default());
+        this.app.use(cors_1.default({
+            exposedHeaders: ["Authorization"],
+        }));
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
+        //this.app.use('/', verifyAuth);
     }
     routes() {
         this.app.use("/mail", MailRoutes_1.default);
         this.app.use("/crypto", CryptoRoutes_1.default);
+        this.app.use("/auth", AuthRoutes_1.default);
+        this.app.get('', authVerification_1.verifyAuth, (req, res) => {
+            res.send('Oosjdfojsfoij');
+        });
     }
 }
 exports.default = new App().app;

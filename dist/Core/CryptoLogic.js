@@ -26,13 +26,6 @@ class CryptoLogic {
             return [data.data[0].logo_url, data.data[0].name];
         });
     }
-    static getCoinPrice(abbreviation) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = yield axios_1.default.get(`https://api.nomics.com/v1/currencies/ticker?key=${process.env.CRYPTO_KEY}&ids=${abbreviation}`);
-            console.log('Price' + data.data[0].price);
-            return data.data[0].price;
-        });
-    }
     static getCurrentPrices(abreviations) {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield axios_1.default.get(`https://api.nomics.com/v1/currencies/ticker?key=${process.env.CRYPTO_KEY}&ids=${abreviations.join()}`);
@@ -49,7 +42,13 @@ class CryptoLogic {
     static getStatistic(user) {
         return __awaiter(this, void 0, void 0, function* () {
             let actualAmount = 0;
-            const statistics = {};
+            const statistics = {
+                coins: [],
+                growth: 0,
+                actualAmount: 0,
+                usdGrowth: 0,
+                ballance: 0
+            };
             const doc = yield Crypto_1.default.findOne({ user });
             if (!user) {
                 throw Error("User not found!");
@@ -61,14 +60,19 @@ class CryptoLogic {
                 const currentPrice = prices[coin.abbreviation];
                 const currentCoinsUsd = currentPrice * coin.amount;
                 actualAmount += currentCoinsUsd;
-                statistics[coin.abbreviation] = {
+                statistics.coins.push({
+                    abbreviation: coin.abbreviation,
+                    icon: coin.icon,
                     growth: this.getGrowth(coin.usd, coin.sold + currentCoinsUsd),
                     currentPrice: currentCoinsUsd,
-                    transactions: [coin.transactions],
-                };
+                    transactions: coin.transactions,
+                });
             }
+            statistics.coins = statistics.coins.sort((a, b) => b.currentPrice - a.currentPrice);
             statistics.growth = this.getGrowth(doc.usdAdded, actualAmount);
             statistics.actualAmount = actualAmount;
+            statistics.usdGrowth = actualAmount - doc.usdAdded;
+            statistics.ballance = doc.ballance;
             return statistics;
         });
     }
@@ -76,7 +80,7 @@ class CryptoLogic {
         return __awaiter(this, void 0, void 0, function* () {
             const doc = yield Crypto_1.default.findOne({ user });
             if (!doc)
-                throw Error('User not found!');
+                throw Error("User not found!");
             const coin = doc.coins.find((c) => c.abbreviation === abbreviation);
             if (!coin)
                 throw Error("Coin not found!");
@@ -84,10 +88,10 @@ class CryptoLogic {
                 coin.amount -= amount;
                 coin.sold += amount * price;
                 coin.transactions.push({
-                    type: 'sold',
+                    type: "sold",
                     amount,
                     usd: amount * price,
-                    date
+                    date,
                 });
                 doc.ballance += amount * price;
                 yield doc.save();
